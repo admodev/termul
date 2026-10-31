@@ -1,0 +1,19 @@
+{
+  "name": "termul",
+  "version": "1.0.0",
+  "description": "Terminal emulator",
+  "main": "dist/index.js",
+  "author": "admodevops",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "yarn build && electron ."
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "electron": "^45.2.1"
+  },
+  "dependencies": {
+    "typescript": "^7.0.2"
+  }
+}
