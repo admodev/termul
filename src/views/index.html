@@ -7,11 +7,32 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <title>Hello from Electron renderer!</title>
+    <!-- Global settings, can be overwriten -->
+    <link rel="stylesheet" href="../styles/globals.css">
+    <link rel="stylesheet" href="../styles/main-terminal.css">
 </head>
 
 <body>
-    <h1>Hello from Electron renderer!</h1>
-    <p>👋</p>
+    <main class="desktop">
+        <section class="terminal-window" id="terminalWindow">
+            <header class="title-bar">
+                <div class="window-controls">
+                    <button class="control close" aria-label="Close"></button>
+                    <button class="control minimize" aria-label="Minimize"></button>
+                    <button class="control fullscreen" aria-label="Fullscreen"></button>
+                </div>
+
+                <span class="window-title">tErMUL</span>
+                <div class="title-bar-spacer"></div>
+            </header>
+
+            <div class="terminal-screen">
+                <div class="scanlines"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../terminal/renderer.ts" defer></script>
 </body>
 
 </html>
