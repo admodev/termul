@@ -1,42 +1,59 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "node:path";
-import * as fs from "node:fs";
 
 const createWindow = (): void => {
-  const preloadPath = path.join(__dirname, "preload.js");
-
-  console.log("[MAIN] __dirname:", __dirname);
-  console.log("[MAIN] Preload path:", preloadPath);
-  console.log("[MAIN] Preload exists:", fs.existsSync(preloadPath));
-
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 700,
+    minWidth: 480,
+    minHeight: 320,
     frame: false,
+    backgroundColor: "#080b08",
     webPreferences: {
-      preload: preloadPath,
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
     },
   });
 
-  win.webContents.on("preload-error", (_event, preloadPath, error) => {
-    console.error("[PRELOAD ERROR]", preloadPath);
-    console.error(error);
-  });
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
-  win.webContents.on("did-finish-load", () => {
-    console.log("[MAIN] Renderer loaded");
-  });
-
-  const indexPath = path.resolve(__dirname, "../src/views/index.html");
-
-  win.loadFile(indexPath);
+  if (devServerUrl) {
+    void win.loadURL(devServerUrl);
+  } else {
+    void win.loadFile(path.join(__dirname, "renderer", "index.html"));
+  }
 };
 
 ipcMain.on("app:quit", () => {
-  console.log("[MAIN] Received app:quit");
   app.quit();
 });
 
-app.whenReady().then(createWindow);
+ipcMain.on("window:minimize", (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.minimize();
+});
+
+ipcMain.on("window:toggle-fullscreen", (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+
+  if (window) {
+    window.setFullScreen(!window.isFullScreen());
+  }
+});
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});

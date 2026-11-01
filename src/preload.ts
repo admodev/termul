@@ -1,9 +1,15 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("electronAPI", {
+const electronAPI = {
   quitApp: (): void => {
     ipcRenderer.send("app:quit");
   },
-});
+  minimizeWindow: (): void => {
+    ipcRenderer.send("window:minimize");
+  },
+  toggleFullscreen: (): void => {
+    ipcRenderer.send("window:toggle-fullscreen");
+  },
+};
 
-console.log("[PRELOAD] Loaded successfully");
+contextBridge.exposeInMainWorld("electronAPI", electronAPI);

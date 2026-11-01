@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "types": ["node"],
+    "noEmit": false
+  },
+  "include": [
+    "src/index.ts",
+    "src/preload.ts"
+  ],
+  "exclude": ["node_modules", "dist", "src/renderer"]
+}

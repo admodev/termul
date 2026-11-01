@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
@@ -11,109 +10,90 @@
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-html,
 body {
     width: 100%;
     height: 100%;
-    font-family: 'IBM Plex Mono', monospace;
-}
-
-body {
     overflow: hidden;
     background: var(--background);
+    color: var(--terminal-green);
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 /* Main layout */
 
 .desktop {
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-    min-height: 0;
-
     display: flex;
     align-items: stretch;
     justify-content: stretch;
-}
-
-.terminal-window {
     width: 100%;
     height: 100%;
     min-width: 0;
     min-height: 0;
+    overflow: hidden;
+}
 
+.terminal-window {
     display: flex;
     flex-direction: column;
-
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
     overflow: hidden;
-
     background: var(--terminal-background);
     border: 1px solid var(--border);
     border-radius: 9px;
-
     box-shadow:
         0 0 35px rgba(0, 0, 0, 0.7),
         0 0 80px rgba(57, 255, 121, 0.04);
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.25s ease;
 }
 
-/* Title bar */
+/* Electron title bar */
 
 .title-bar {
-    height: 38px;
-    min-height: 38px;
-
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    height: 38px;
+    min-height: 38px;
     padding: 0 13px;
-
     background: var(--title-bar);
     border-bottom: 1px solid var(--border);
-
-    position: relative;
-
-    /* Electron draggable region */
     -webkit-app-region: drag;
     user-select: none;
 }
 
 .window-controls {
+    z-index: 1;
     display: flex;
     align-items: center;
     gap: 8px;
-
-    z-index: 1;
-
-    /* Keep controls interactive */
     -webkit-app-region: no-drag;
 }
 
 .control {
+    display: block;
     width: 12px;
     height: 12px;
-
-    border: none;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
-
     cursor: pointer;
-
     transition: filter 0.15s ease;
-
     -webkit-app-region: no-drag;
 }
 
 .control:hover {
     filter: brightness(1.3);
+}
+
+.control:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
 }
 
 .close {
@@ -132,12 +112,10 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-
     color: #8b978d;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 2px;
-
     pointer-events: none;
 }
 
@@ -145,83 +123,82 @@ body {
     width: 44px;
 }
 
-/* Terminal screen */
+/* Terminal viewport */
 
 .terminal-screen {
+    position: relative;
     flex: 1;
-
     min-width: 0;
     min-height: 0;
-
-    position: relative;
     overflow: hidden;
-
     background: var(--terminal-background);
-
     box-shadow: inset 0 0 45px rgba(57, 255, 121, 0.035);
 }
 
 .terminal-screen::before {
-    content: "";
-
     position: absolute;
-    inset: 0;
-
+    z-index: 2;
     pointer-events: none;
-
+    content: "";
+    inset: 0;
     background: radial-gradient(
         ellipse at center,
         transparent 45%,
         rgba(0, 0, 0, 0.55) 100%
     );
-
-    z-index: 2;
 }
 
 .scanlines {
     position: absolute;
-    inset: 0;
-
+    z-index: 1;
     pointer-events: none;
-
+    inset: 0;
     background: repeating-linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 0,
         rgba(0, 0, 0, 0.12) 1px,
         transparent 1px,
         transparent 3px
     );
-
     opacity: 0.5;
-    z-index: 1;
 }
 
-/* Window controls */
-
-.terminal-window.closed {
-    opacity: 0;
-    transform: scale(0.95);
-    pointer-events: none;
-}
-
-.terminal-window.minimized {
-    height: 38px;
-    flex: 0 0 38px;
-}
-
-.terminal-window.minimized .terminal-screen {
-    display: none;
-}
-
-.terminal-window.fullscreen-mode {
-    position: fixed;
-    inset: 0;
-
+.route-content {
+    position: relative;
+    z-index: 3;
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
 
-    border-radius: 0;
-    z-index: 10;
+.home-page {
+    width: 100%;
+    height: 100%;
+}
+
+.placeholder-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px;
+    color: var(--terminal-green);
+}
+
+.placeholder-page h1 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.placeholder-page p,
+.placeholder-page a {
+    font-size: 13px;
+}
+
+.placeholder-page a {
+    color: var(--terminal-green);
 }
 
 /* Responsive */
